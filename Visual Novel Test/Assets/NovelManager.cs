@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Ink.Runtime;
+using Ink.Runtime; // MAKE SURE UR USING THIS!!!!!!!!!!!!!!!
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -24,12 +24,14 @@ public class NovelManager : MonoBehaviour
     [SerializeField] private GameObject[] choices;
     [SerializeField] private GameObject startPanel;
     [SerializeField] private GameObject startButton;
-    private Story currentStory;
 
-    public TextAsset testingScript; //This is just here to feed a test script to start dialogue
+    private Story currentStory; // The Story object you use to advance line by line.
+
+    public TextAsset testingScript; //This is just here to feed the JSON file to start dialogue
 
 
-    public InputAction submitAction;
+    public InputAction submitAction; // This is the submit action to advance dialogue + select choices. if don't know what the new input system is, you can use old one.
+    // CERTAIN THINGS IN THIS SCRIPT WILL NOT WORK IF YOU USE OLD INPUT SYSTEM.
 
     // Current State
     public bool dialogueIsPlaying { get; private set; }
@@ -49,6 +51,7 @@ public class NovelManager : MonoBehaviour
         if(instance != null)
         {
             Debug.Log("Multiple instances of NovelManager detected");
+            return;
         }
 
         instance = this;
@@ -75,13 +78,13 @@ public class NovelManager : MonoBehaviour
         if (currentStory.currentChoices.Count == 0 && !isLineScolling)
         {
             ContinueStory();
-        } else if(isLineScolling) //If cannot continue, try to skip line scrolling
+        } else if(isLineScolling) //If cannot continue, try to skip line scrolling. THIS IS ONLY NEEDED IF YOU WANT LINE SKIPPING.
         {
             desireSkipLineScrolling = true;
         }
     }
 
-    public void StartDialogue(TextAsset inkJSON)
+    public void StartDialogue(TextAsset inkJSON) // gets the ink json file
     {
         startPanel.SetActive(false);
         AudioManager.GetInstance().SwitchTheme(" ");
